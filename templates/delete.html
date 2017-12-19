@@ -1,0 +1,18 @@
+   {% extends "base.html" %}
+
+    {% load staticfiles %}
+
+
+    {% block title %}URL Delete{% endblock title %}
+
+   
+
+{% block content %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input class= "btn btn-primary btn-lg" type="submit" value="Delete!"/>
+  </form>
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+  {% load staticfiles %}
+
+
+  {% block title %}Shortener URL{% endblock title %}
+  
+        
+
+  {% block content %}
+
+ <hr style="border: none; background-color: white; height: 2px;">
+
+<div class="container" id ="form_add">
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-primary btn-lg">Create short URL</button>
+    </form>
+</div>
+
+  <!-- Default panel contents -->
+
+  <hr style="border: none; background-color: white; height: 2px;">
+{% if urls %}
+<div class="container">
+     <div class="table-responsive">
+      <table class="table table-striped">
+        <tr>
+            <th>#</th>
+            <th>URL</th>
+            <th>Clicks</th>
+            <th>Short URL</th>
+            <th>Created</th>
+            <th>Action</th>
+        </tr>
+        {% for i in urls.object_list %}
+        <tr>
+           <td><a href="{% url 'urls_short:detail' pk=i.id %}">{{ forloop.counter }}</a></td>
+           <td><a href="{% url 'urls_short:index' pk=i.id %}">{{ i.url_max }}</a></td>
+           <td>{{ i.click }}</td>
+           <td><a href='{{ i.url_max }}'>{{ i.url_short }}</a></td>
+           <td> {{ i.date_of_create }}</td>
+          <td><button><a href="{% url 'urls_short:remove' pk=i.id %}" style="text-decoration: none;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></button>
+          </td>
+        </tr> 
+    {% endfor %}
+      </table>  
+      </div>
+      </div> 
+
+<hr style="border: none; background-color: white; height: 2px;"/>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if urls.has_previous %}
+            <a href="?page={{ urls.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ urls.number }} of {{ urls.paginator.num_pages }}.
+        </span>
+
+        {% if urls.has_next %}
+            <a href="?page={{ urls.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}
