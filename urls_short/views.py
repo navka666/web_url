@@ -5,6 +5,8 @@ import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import string
 import datetime
+from django.conf import settings
+
 
 
 def url_generator(size=6, chars=string.ascii_uppercase + string.digits):
@@ -28,7 +30,7 @@ def urls_list(request, pk=0):
             url_new.url_max = data['url_max']
 
             if data['url_short'] == '':
-                url_new.url_short = 'domain.com/'+url_generator()
+                url_new.url_short = settings.SITE_URL + "/" + url_generator()
             else:
                 url_new.url_short = data['url_short']
             url_new.save()
@@ -39,9 +41,10 @@ def urls_list(request, pk=0):
 
     
     if pk != 0:
-        app = URL.objects.get(id=pk)
+        app = URL.objects.get(id=pk)  
         app.click += 1
         app.save()
+        return redirect(app.url_max)
 
     paginator = Paginator(urls, 5)
     page = request.GET.get('page')
