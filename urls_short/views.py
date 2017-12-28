@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import string
 import datetime
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 
@@ -58,26 +59,33 @@ def urls_list(request, pk=0):
         # If page is out of range (e.g. 9999), deliver last page of results.
         urls = paginator.page(paginator.num_pages)
 
+    user = request.user
 
-    return render(request, 'index.html', {'urls': urls, 'form': form})
+    return render(request, 'index.html', {'urls': urls, 'form': form, 'user':user})
 
 
 
 def remove(request, pk):
+    user = request.user
     app = URL.objects.get(id=pk)
     if request.method == "POST":
         app.delete()
         return redirect('urls_short:index')
     else:
-        return render(request, 'delete.html')
+        return render(request, 'delete.html', {'user': user})
+
 
 
 def detail(request, pk):
     url = URL.objects.get(id=pk)
-    return render(request, 'detail.html', {'url': url})
+    user = request.user
+    return render(request, 'detail.html', {'url': url, 'user':user})
+
+
 
 def edit(request, pk):
     url = get_object_or_404(URL, pk=pk)
+    user = request.user
     if request.method == "POST":
         form = UrlForm(request.POST, instance=url)
         if form.is_valid():
@@ -89,4 +97,15 @@ def edit(request, pk):
             return redirect('urls_short:index')
     else:
         form = UrlForm(instance=url)
-    return render(request, 'edit.html', {'form': form})
+    return render(request, 'edit.html', {'form': form, 'user':user})
+
+
+def share(request, pk):
+    user = request.user
+    users = User.objects.exclude(id=user.id)
+    if request.method == "GET":
+        app = URL.objects.get(id=pk) 
+        app.click += 1
+        app.save()
+
+    return render(request, 'share.html', {'user':user, 'users': users})

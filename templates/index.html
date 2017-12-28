@@ -6,6 +6,7 @@
   {% block title %}Shortener URL{% endblock title %}
   
         
+  {% block user %}{{ user }}{% endblock user %}
 
   {% block content %}
 
@@ -37,12 +38,12 @@
         {% for i in urls.object_list %}
         <tr>
            <td><a href="{% url 'urls_short:detail' pk=i.id %}">{{ forloop.counter }}</a></td>
-           <td><a href="{{ i.url_max }}">{{ i.url_max }}</a></td>
+           <td><a href="{% url 'urls_short:index' pk=i.id %}">{{ i.url_max }}</a></td>
            <td>{{ i.click }}</td>
-           <td><a href='{{ i.url_max }}'>{{ i.url_short }}</a></td>
+           <td><a href="{% url 'urls_short:index' pk=i.id %}">{{ i.url_short }}</a></td>
            <td> {{ i.date_of_create }}</td>
           <td>
-          <button><a href="{% url 'urls_short:index' pk=i.id %}" style="text-decoration: none;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Share</a></button>
+          <button><a href="{% url 'urls_short:share' pk=i.id %}" style="text-decoration: none;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Share</a></button>
           <button><a href="{% url 'urls_short:remove' pk=i.id %}" style="text-decoration: none;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></button>
           </td>
         </tr> 

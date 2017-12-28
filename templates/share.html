@@ -1,0 +1,32 @@
+  {% extends "base.html" %}
+
+  {% load staticfiles %}
+
+
+  {% block title %}{{ url.url_short }}{% endblock title %}
+  
+  {% block user %}{{ user }}{% endblock user %}
+          
+  {% block content %}
+  <div class="container">
+     <div class="table-responsive">
+      <table class="table table-striped">
+        <tr>
+            <th>#</th>
+            <th>USER</th>
+            <th>Action</th>
+        </tr>
+        {% for i in users %}
+        <tr>
+           <td>{{ forloop.counter }}</td>
+           <td>{{ i.get_username }}</td>
+           <td>
+            <button><a href="{% url 'urls_short:index' %}" style="text-decoration: none;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Share</a></button>
+          </td>
+         </tr> 
+        {% endfor %}
+      </table>  
+      </div>
+      </div> 
+
+  {% endblock content %}

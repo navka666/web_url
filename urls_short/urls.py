@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/', views.detail, name='detail'),
     url(r'^/(?P<pk>\d+)/$', views.urls_list, name='index'),
     url(r'^edit/(?P<pk>\d+)/$', views.edit, name='edit'),
+    url(r'^share/(?P<pk>\d+)/$', views.share, name='share'),
     ]
